@@ -38,3 +38,22 @@ exports.auth = async (req, res, next) => {
     }
 }
 
+// isstudent
+
+exports.isStudent = async (req, res, next) => {
+    try {
+        //get
+        if(req.user.accountType !== "student"){
+            return res.status(401).json({
+                success: false,
+                message: "You are not authorized to access this route"
+            })
+        }
+        next();
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: "User role is not verified. Please try again later"
+        })
+    }
+}
