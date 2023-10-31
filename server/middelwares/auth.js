@@ -77,3 +77,23 @@ exports.isInstructor = async (req, res, next) => {
         })
     }
 }
+
+// admin
+
+exports.isAdmin = async (req, res, next) => {
+    try {
+        //get
+        if(req.user.accountType !== "Admin"){
+            return res.status(401).json({
+                success: false,
+                message: "You are not authorized to access Admin route"
+            })
+        }
+        next();
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: "User role is not verified. Please try again later"
+        })
+    }
+}
