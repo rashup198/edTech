@@ -2,6 +2,8 @@ const User = require('../models/User');
 const OTP = require('../models/OTP');
 const otpGenerator = require('otp-generator');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+require('dotenv').config();
 
 // send otp
 exports.sendOTP = async (req, res) => {
@@ -149,3 +151,68 @@ exports.signUp = async (req, res) => {
     }
 
 }
+
+
+//login
+    exports.login = async (req, res) => {
+        try {
+            // fetch data from req.body
+             const {email, password} = req.body;
+
+            // validate data
+            if(!email || !password){
+                return res.status(400).json({
+                    success: false,
+                    message: "All fields are required"
+                });
+            }
+
+            // check if user exist in db
+            const user = await User.findOne({email}).populate("additionalDetails");
+            if(!user){
+                return res.status(401).json({
+                    success: false,
+                    message: "User is not registered with us"
+                });
+            }
+
+            // generate JWT, after password matching 
+            if(await bcrypt.compare(password, user.password)){
+                const payload = {
+                    email: user.email,
+                    id: user._id,
+                    role:user.role,
+
+                }
+                const token = jwt.sign(payload,process.env.JWT_SECRET,{
+                    expiresIn:"2h"
+                })
+                user.token = token;
+                user.password = undefined;
+
+                // create cookie
+                const option = {
+                    expires: new Date(Date.now()+ 3*24*60*60*1000),
+                    httpOnly: true
+                }
+
+                res.cookie("token",token, option).status(200).json({
+                    success: true,
+                    message: "User logged in successfully",
+                    user,token
+                });
+            } else {
+                return res.status(401).json({
+                    success: false,
+                    message: "Invalid credentials"
+                });
+            }
+        } catch (error) {
+            console.log("error", error);
+            res.status(500).json({
+                success: false,
+                message:"User can not be logged in. Please try again later"
+            });
+        }
+
+    }
