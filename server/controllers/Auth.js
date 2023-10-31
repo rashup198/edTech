@@ -216,3 +216,62 @@ exports.signUp = async (req, res) => {
         }
 
     }
+
+    // change password
+
+    exports.changePassword = async (req, res) => {
+
+        try {
+            // fetch data from req.body
+            const {oldPassword, newPassword, confirmPassword} = req.body;
+
+            // validate data
+            if(!oldPassword || !newPassword || !confirmPassword){
+                return res.status(400).json({
+                    success: false,
+                    message: "All fields are required"
+                });
+            }
+
+            // check if new password and confirm password are same
+            if(newPassword !== confirmPassword){
+                return res.status(400).json({
+                    success: false,
+                    message: "New password and confirm password are not same"
+                });
+            }
+
+            // check if user exist in db
+            const user = await User.findById(req.userId);
+            if(!user){
+                return res.status(401).json({
+                    success: false,
+                    message: "User is not registered with us"
+                });
+            }
+
+            // check if old password is correct
+
+            if(await bcrypt.compare(oldPassword, user.password)){
+                const hashedPassword = await bcrypt.hash(newPassword, 10);
+                user.password = hashedPassword;
+                await user.save();
+                return res.status(200).json({
+                    success: true,
+                    message: "Password changed successfully"
+                });
+            } else {
+                return res.status(401).json({
+                    success: false,
+                    message: "Invalid credentials"
+                });
+            }
+        } catch (error) {
+            console.log("error", error);
+            res.status(500).json({
+                success: false,
+                message:"Password can not be changed. Please try again later"
+            });
+        }
+
+    }
