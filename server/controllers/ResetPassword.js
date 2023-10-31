@@ -1,5 +1,6 @@
  const User = require("../models/User");
  const mailSender = require("../utils/mailSender");
+ const bcrypt = require("bcryptjs");
 
  //reset password token
  exports.resetPasswordToken = async (req, res) => {
@@ -39,6 +40,63 @@
             message: "Reset password link sent successfully to your email"
         });
 
+    } catch (error) {
+        console.log("error", error);
+        res.status(500).json({
+            success: false,
+            message:error.message
+        });
+    }
+ }
+
+ //reset password
+
+ exports.resetPassword = async (req, res) => {
+    try {
+        //data fetch
+        const { password, confirmPassword, token } = req.body;
+        // validate
+        if(!password || !confirmPassword){
+            return res.status(400).json({
+                success: false,
+                message: "All fields are required"
+            });
+        }
+        if(password !== confirmPassword){
+            return res.status(400).json({
+                success: false,
+                message: "Password and confirm password does not match"
+            });
+        }
+
+        //find user by token
+        const userDetails = await User.findOne({token:token});
+        // if no entry found
+        if(!userDetails){
+            return res.status(400).json({
+                success: false,
+                message: "Invalid token"
+            });
+        }
+        //token is expired
+        if(userDetails.resetPasswordExpires< Date.now()){
+            return res.status(400).json({
+                success: false,
+                message: "Token expired"
+            });
+        }
+        //hash password
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        //update user
+        await User.findOneAndUpdate({token:token}, {password:hashedPassword},
+        {new:true});
+        
+        //send response
+        return res.status(200).json({
+            success: true,
+            message: "Password reset successfully"
+        });
     } catch (error) {
         console.log("error", error);
         res.status(500).json({
