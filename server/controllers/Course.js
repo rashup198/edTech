@@ -93,3 +93,29 @@ exports.createCourse = async (req, res) => {
 
 }
 
+// get all courses
+
+exports.getAllCourses = async (req, res) => {
+
+    try {
+        const allCourses = await Course.find({},{courseName:true, courseDescription:true, price:true, whatYouWillLearn:true, thumbnail:true, rantingAndReviews:true, instructor:true, tag:true, studentsEnrolled:true}).populate("instructor").exec();
+
+        //send response
+
+        return res.status(200).json({
+            success: true,
+            message: "All courses fetched successfu  lly",
+            allCourses
+        });
+        
+    } catch (error) {
+       console.log("error", error); 
+       return res.status(500).json({
+           success: false,
+           message:"failed to get courses",
+           error:error.message
+       });
+    }
+
+}
+
