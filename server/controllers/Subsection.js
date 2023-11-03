@@ -53,3 +53,55 @@ exports.createSubSection = async (req, res) => {
     }
 
 }
+
+// update subsection
+
+exports.updateSubSection = async (req, res) => {
+
+    try {
+        //fetch data
+        const {titel, timeDuration, description, sectionId} = req.body;
+        const video = req.file.videoFile;
+        const subSectionId = req.params.id;
+
+        //validation
+        if(!titel || !timeDuration || !description || !sectionId || !video){
+            return res.status(400).json({
+                success:false,
+                message:"All fields are required"
+            })
+        }
+
+        //delete old video from cloudinary
+        const subSection = await SubSection.findById(subSectionId);
+        await deleteImageFromCloudinary(subSection.video);
+
+        // upload video to cloudinary
+
+        const uploadDetails = await uploadImageToCloudinary(video,process.env.Folder_Name)
+
+        //update subsection
+        const updateSubSectionDetails = await SubSection.findByIdAndUpdate(subSectionId,{
+            titel:titel,
+            timeDuration:timeDuration,
+            description:description,
+            video:uploadDetails.secure_url
+        },{new:true})
+
+        //send response
+        return res.status(200).json({
+            success:true,
+            message:"Subsection updated successfully",
+            updateSubSectionDetails
+        })
+        
+    } catch (error) {
+        console.log("error",error);
+        return res.status(500).json({
+            success:false,
+            message:"failed to create subsection",
+            error:error.message
+        })
+    }
+
+}
