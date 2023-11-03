@@ -45,3 +45,42 @@ exports.updateProfile = async (req, res) => {
         })
     }
 }
+
+// delete profile
+
+exports.deleteProfile = async (req, res) => {
+
+    try {
+        const id= req.user.id;
+        //validation
+        const userDetails = await User.findById({id});
+        if(!userDetails){
+            return res.status(404).json({
+                success:false,
+                message:"User not found"
+            })
+        }
+
+        // delete profile
+        await Profile.findByIdAndDelete({_id:userDetails.additionalDetails});
+
+        //delete user
+        await User.findByIdAndDelete({_id:id});
+
+        //unenroll user from course
+        await Enroll.deleteMany({userId:id});
+
+        //send response
+        return res.status(200).json({
+            success:true,
+            message:"user deleted successfully"
+        })
+        
+    } catch (error) {
+         return res.status(500).json({
+            success:false,
+            message:"failed to delete user",
+            error:error.message
+        })
+    }
+}
