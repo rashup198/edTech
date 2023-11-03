@@ -84,3 +84,35 @@ exports.deleteProfile = async (req, res) => {
         })
     }
 }
+
+// get all user details
+
+exports.getAllUserDetails = async (req, res) => {
+
+    try {
+        const id= req.user.id;
+        //validation
+        const userDetails = await User.findById({id}).populate("additionalDetails").exec();
+        if(!userDetails){
+            return res.status(404).json({
+                success:false,
+                message:"User not found"
+            })
+        }
+
+        //send response
+        return res.status(200).json({
+            success:true,
+            message:"user details fetched successfully",
+            data:userDetails
+        })
+
+    } catch (error) {
+        console.log("error",error);
+        return res.status(500).json({
+            success:false,
+            message:"failed to fetch user details",
+            error:error.message
+        })
+    }
+}
