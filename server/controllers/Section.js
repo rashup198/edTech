@@ -81,3 +81,40 @@ exports.updateSection = async (req, res) => {
     }
 
 }
+
+// delete section
+
+exports.deleteSection = async (req,res)=>{
+    try {
+        //data fetch
+        const {sectionId} = req.params;
+
+        //validation
+        if(!sectionId){
+            return res.status(400).json({
+                success:false,
+                message:"All fields are required"
+            })
+        }
+
+        //delete section findbyidanddelete
+
+        const deleteSectionDetails = await Section.findByIdAndDelete(sectionId)
+
+        //send response
+
+        return res.status(200).json({
+            success:true,
+            message:"Section deleted successfully",
+            deleteSectionDetails
+        })
+
+    } catch (error) {
+        console.log("error", error);
+        res.status(500).json({
+            success:false,
+            message:"failed to update section",
+            error:error.message
+        }) 
+    }
+}
