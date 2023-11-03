@@ -101,6 +101,7 @@ exports.deleteSection = async (req,res)=>{
 
         const deleteSectionDetails = await Section.findByIdAndDelete(sectionId)
 
+
         //send response
 
         return res.status(200).json({

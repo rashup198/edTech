@@ -1,0 +1,55 @@
+const SubSection = require('../models/SubSection');
+const Section = require('../models/Section');
+const {uploadImageToCloudinary} = require('../utils/uploadImageToCloudinary');
+
+// create subsection
+
+exports.createSubSection = async (req, res) => {
+
+    try {
+        //data fetch
+        const {titel, timeDuration, description, sectionId} = req.body;
+        const video = req.file.videoFile;        
+
+        //validation
+
+        if(!titel || !timeDuration || !description || !sectionId || !video){
+            return res.status(400).json({
+                success:false,
+                message:"All fields are required"
+            })
+        }
+
+        //upload video to cloudinary
+
+        const uploadDetails = await uploadImageToCloudinary(video,process.env.Folder_Name)
+
+        //create subsection
+        const subSectionDetails = await SubSection.create({
+            titel:titel,
+            timeDuration:timeDuration,
+            description:description,
+            video:uploadDetails.secutr_url
+        })
+
+        //update section
+        const section = await Section.findById({_id:sectionId},
+            {$push:{subsection:subSectionDetails._id}});
+
+        //send response
+        return res.status(200).json({
+            success:true,
+            message:"Subsection created successfully",
+            data:SubSectionDetails
+        })
+
+    } catch (error) {
+        console.log("error",error);
+        return res.status(500).json({
+            success:false,
+            message:"failed to create subsection",
+            error:error.message
+        })
+    }
+
+}
