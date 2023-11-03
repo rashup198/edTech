@@ -44,3 +44,40 @@ exports.createSection = async (req, res)=>{
         })
     }
 }
+
+// updated section
+
+exports.updateSection = async (req, res) => {
+
+    try {
+        //data fetch
+        const {sectionName,sectionId} = req.body;
+
+        //validation
+        if(!sectionName || !sectionId){
+            return res.status(400).json({
+                success:false,
+                message:"All fields are required"
+            })
+        }
+
+        //update section
+        const updateSectionDetails =await Section.findByIdAndUpdate(sectionId,{sectionName},{new:true})
+
+        //send response
+        return res.status(200).json({
+            success:true,
+            message:"Section updated successfully",
+            updateSectionDetails
+        })
+
+    } catch (error) {
+        console.log("error", error);
+        res.status(500).json({
+            success:false,
+            message:"failed to update section",
+            error:error.message
+        }) 
+    }
+
+}
