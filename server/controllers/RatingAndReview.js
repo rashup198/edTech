@@ -111,8 +111,47 @@ exports.getAverageRating = async (req, res) => {
         console.log("error",error);
         return res.status(500).json({
             success:false,
-            message:"Failed to create rating and review",
-            error:error.message
+            message:error.message,
         })
     }
+}
+
+// get all rating and review of a course
+
+exports.getAllRatingAndReview = async (req, res) => {
+
+    try {
+
+        // get course id
+        const courseId = req.body.courseid;
+
+        // get all rating and review
+        const result = await RatingAndReview.find({course:courseId}).sort({rating:("desc")}).populate("user").exec();
+
+        // validate result
+        if(result.length>0){
+            return res.status(200).json({
+                success:true,
+                message:"Rating and review fetched successfully",
+                result
+            })
+        }
+
+        // if no rating and review found
+        return res.status(200).json({
+            success:true,
+            message:"No rating and review found",
+            result:[]
+        })
+
+
+
+    } catch (error) {
+        console.log("error",error);
+        return res.status(500).json({
+            success:false,
+            message:"Failed to get rating and review",
+        })
+    }
+
 }
