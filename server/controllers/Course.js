@@ -11,22 +11,34 @@ exports.createCourse = async (req, res) => {
     try {
         
         //extract data from req.body
-        const{courseName, courseDescription, price, tag, whatYouWillLearn}= req.body;
+        const{courseName,
+			courseDescription,
+			whatYouWillLearn,
+			price,
+			tag,
+			category,
+			status,
+			instructions,}= req.body;
 
         //get thumbnail 
         const thumbnail = req.file.thumbnailImage;
 
         //validation
-        if(!courseName || !courseDescription || !price || !tag || !whatYouWillLearn || !thumbnail){
+        if(!courseName || !courseDescription || !price || !tag || !whatYouWillLearn || !thumbnail || !category){
             return res.status(400).json({
                 success: false,
                 message: "All fields are required"
             })
         }
+        if(!status || status === undefined){
+            status = "Draft";
+        }
 
         //check for instructor
         const userId = req.user._id;
-        const instructorDetails = await User.findById(userId);
+        const instructorDetails = await User.findById(userId,{
+            accountType:"Instructor"
+        });
         console.log("instructorDetails", instructorDetails);
         if(!instructorDetails){
             return res.status(400).json({
@@ -36,12 +48,12 @@ exports.createCourse = async (req, res) => {
         }
 
         //check for tag
-        const tagDetails = await Tag.findById(tag);
-        console.log("tagDetails", tagDetails);
-        if(!tagDetails){
+        const categoryDetails = await Category.findById(category);
+        console.log("categoryDetails", categoryDetails);
+        if(!categoryDetails){
             return res.status(400).json({
                 success: false,
-                message: "Tag not found"
+                message: "Category not found"
             })
         }
 
@@ -69,11 +81,11 @@ exports.createCourse = async (req, res) => {
             
         // updated tag course array
 
-        await Tag.findByIdAndUpdate
-        ({_id:tagDetails._id},
+        await Category.findByIdAndUpdate
+        ({_id:category},
             {$push:{courses:newCourse._id}},
             {new:true},)
-
+  
             //send response
 
             return res.status(200).json({

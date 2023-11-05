@@ -3,7 +3,12 @@ const OTP = require('../models/OTP');
 const otpGenerator = require('otp-generator');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const mailSender = require('../utils/mailSender');
+const {passwordUpdated} =require("../mail/templates/passwordUpdate")
+const Profile = require('../models/Profile');
 require('dotenv').config();
+
+
 
 // send otp
 exports.sendOTP = async (req, res) => {
@@ -98,7 +103,7 @@ exports.signUp = async (req, res) => {
         console.log("recentOtp", recentOtp);
 
         // check if otp is valid or not
-        if(recentOpt.length==0){
+        if(recentOtp.length==0){
             return res.status(400).json({
                 success: false,
                 message: "Invalid OTP"

@@ -15,11 +15,11 @@ exports.createCategory = async (req, res) => {
         }
 
         //create category in db
-        const categoryDetails = await Category.create({
+        const CategoryDetails = await Category.create({
             name:name,
             description:description
         });
-        console.log("categoryDetails", categoryDetails);
+        console.log("categoryDetails", CategoryDetails);
 
         //send response
         return res.status(200).json({
@@ -40,7 +40,7 @@ exports.createCategory = async (req, res) => {
 
 // get all category
 
-exports.getallCategory = async (req, res) => {
+exports.showAllCategories = async (req, res) => {
 
     try {
         const allCategory = await Category.find({},{name:true, description:true});
@@ -49,7 +49,7 @@ exports.getallCategory = async (req, res) => {
         return res.status(200).json({
             success: true,
             message: "All categories fetched successfully",
-            allTags
+            allCategory
         });
     } catch (error) {
         console.log("error", error);
