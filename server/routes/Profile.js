@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const {auth}= require('../middlewares/auth');
+const {auth}= require("../middelwares/auth");
 
 // Controllers
 const{getEnrolledCourses,updateDisplayPicture,getAllUserDetails,deleteProfile,updateProfile,} = require('../controllers/Profile');
@@ -19,4 +19,3 @@ router.get('/getEnrolledCourses',auth,getEnrolledCourses);
 router.put('/updateDisplayPicture',auth,updateDisplayPicture);
 
 module.exports = router;
-s

@@ -8,7 +8,7 @@ const {signUp,changePassword,login,sendOTP} = require('../controllers/Auth');
 
 const {resetPassword,resetPasswordToken}= require('../controllers/ResetPassword');
 
-const {auth, isInstrutor,isAdmin,isStudent} = require('../middlewares/auth');
+// const {auth, isInstrutor,isAdmin,isStudent} = require('../middlewares/auth');
 
 //routes for login and signup and authentication
 

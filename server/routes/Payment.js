@@ -3,7 +3,7 @@ const router = express.Router();
 
 // Controllers
 const {capturePayment,verifySignature} = require('../controllers/Payments');
-const {auth, isInstrutor,isAdmin,isStudent} = require('../middlewares/auth');
+const {auth,isStudent} = require('../middelwares/auth');
 
 // Payment routes
 
