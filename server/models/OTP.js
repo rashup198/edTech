@@ -24,6 +24,7 @@ const OTPSchema = new mongoose.Schema({
 async function sendVerficationEmail(email, otp) {
     try {
         const mailResponse = await mailSender(email, "OTP for Pathsala", otp);
+        console.log("mailResponse", mailResponse);
     } catch (error) {
         console.log("Error in sending verification email", error);
         throw new Error(error); 
@@ -31,8 +32,12 @@ async function sendVerficationEmail(email, otp) {
 }
 
 OTPSchema.pre('save', async function(next){
-    await sendVerficationEmail(this.email, this.otp);   
-    next();
+
+    // send mail only when new doc is created
+
+    if(!this.isNew){
+        await sendVerficationEmail(this.email, this.otp);   
+    }next();
 })
 
 module.exports = mongoose.model('OTP', OTPSchema);
