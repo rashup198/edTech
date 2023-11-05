@@ -112,7 +112,6 @@ exports.verifySignature = async (req, res) => {
 
     const webhookSecret = "123456789";
     const signature = req.headers['x-razorpay-signature'];
-
     const shasum = crypto.createHmac('sha256', webhookSecret)
     shasum.update(JSON.stringify(req.body))
     const digest = shasum.digest('hex');
@@ -150,7 +149,7 @@ exports.verifySignature = async (req, res) => {
                             message:"User not found"
                         })
                     }
-                    
+        
                     //mail send to user about conformatin of enrollment
                     const emailResponse = await mailSender({
                         to:enrolledStudent.email,
@@ -183,5 +182,4 @@ exports.verifySignature = async (req, res) => {
                 message:"Payment failed"
             })
         }
-
 }
