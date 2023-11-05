@@ -1,4 +1,5 @@
 const Category = require('../models/category');
+const dotenv = require('dotenv');
 
 //create category
 

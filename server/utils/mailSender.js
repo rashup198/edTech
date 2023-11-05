@@ -1,6 +1,7 @@
 const nodemailer = require('nodemailer');
+const dotenv = require('dotenv');
 
-const mailSender = async (email, titel, body) => {
+const mailSender = async (email, title, body) => {
     try {
         const transporter = nodemailer.createTransport({
             host: 'smtp.gmail.com',
@@ -9,14 +10,14 @@ const mailSender = async (email, titel, body) => {
                 pass: process.env.EMAIL_PASS,
             },
         });
-        const mailOptions = {
-            from:"Pathsala || By Priyanshu",
-            to: email,
-            subject: `OTP from Pathsala ${titel}`,
-            text: `Your OTP is ${body}`,
-        };
+        let info = await transporter.sendMail({
+            from: 'Paathshala || Learning made easy',
+            to:`${email}`,
+            subject: `${title}`,
+            html: `${body}`,
+        })
         console.log(info);
-        await transporter.sendMail(mailOptions);
+        return info;
     }
     catch (err) {
         console.log(err);

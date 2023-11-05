@@ -2,6 +2,7 @@ const Course = require('../models/Course');
 const Category = require('../models/category');
 const User = require('../models/User');
 const { uploadImageToCloudinary } = require('../utils/imageUploader');
+const dotenv = require('dotenv');
 
 
 //create course

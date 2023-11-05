@@ -4,6 +4,7 @@ const Course = require('../models/Course');
 const User = require('../models/User');
 const mailSender = require('../utils/mailSender');
 const {courseEnrollmentEmail}= require('../mail/templates/courseEnrollmentEmail');
+const dotenv = require('dotenv');
 
 //capture payment and inisiating razorpay order
 

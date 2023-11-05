@@ -2,6 +2,7 @@ const RatingAndReview = require('../models/RatingAndReview');
 const Course = require('../models/Course');
 const User = require('../models/User');
 const {mongo , default:mongoose} = require('mongoose');
+const dotenv = require('dotenv');
 
 
 //create rating 
