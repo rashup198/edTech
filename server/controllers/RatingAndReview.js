@@ -155,3 +155,36 @@ exports.getAllRatingAndReview = async (req, res) => {
     }
 
 }
+
+// get all rating and review on the platform
+
+
+exports.getAllRatingAndReviewOnPlatform = async (req, res) => {
+
+    try {
+        const allReviews = await RatingAndReview.find({}).populate({
+            path:"user",
+            select:"firstName lastName email image"
+        }).populate({
+            path:"course",
+            select:"courseName"
+        }).exec();
+
+        // send response
+
+        return res.status(200).json({
+            success:true,
+            message:"All rating and review fetched successfully",
+            allReviews
+        })
+
+        
+    } catch (error) {
+        console.log("error",error);
+        return res.status(500).json({
+            success:false,
+            message:"Failed to get rating and review",
+        })
+    }
+
+}
