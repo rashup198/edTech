@@ -18,7 +18,7 @@ exports.auth = async (req, res, next) => {
 
         //verify token
         try {
-            const decode = await jwt.verify(token, process.env.JWT_SECRET);
+            const decode = jwt.verify(token, process.env.JWT_SECRET);
             console.log("decode", decode);
             req.user=decode;
 
@@ -46,7 +46,7 @@ exports.isStudent = async (req, res, next) => {
         if(req.user.accountType !== "student"){
             return res.status(401).json({
                 success: false,
-                message: "You are not authorized to access this route"
+                message: "You are not authorized to access this route this is for student only"
             })
         }
         next();
