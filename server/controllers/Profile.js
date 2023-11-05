@@ -53,8 +53,8 @@ exports.deleteProfile = async (req, res) => {
     try {
         const id= req.user.id;
         //validation
-        const userDetails = await User.findById({id});
-        if(!userDetails){
+        const user = await User.findById({id});
+        if(!user){
             return res.status(404).json({
                 success:false,
                 message:"User not found"
@@ -62,13 +62,13 @@ exports.deleteProfile = async (req, res) => {
         }
 
         // delete profile
-        await Profile.findByIdAndDelete({_id:userDetails.additionalDetails});
+        await Profile.findByIdAndDelete({_id:user.additionalDetails});
 
         //delete user
         await User.findByIdAndDelete({_id:id});
 
         //unenroll user from course
-        await Enroll.deleteMany({userId:id});
+        await Course.updateMany({enrolledUsers:id},{$pull:{enrolledUsers:id}});
 
         //send response
         return res.status(200).json({
@@ -116,3 +116,35 @@ exports.getAllUserDetails = async (req, res) => {
         })
     }
 }
+
+// update profile picture of user
+
+exports.updateDisplayPicture = async (req, res) => {
+    try {
+      const displayPicture = req.files.displayPicture
+      const userId = req.user.id
+      const image = await uploadImageToCloudinary(
+        displayPicture,
+        process.env.FOLDER_NAME,
+        1000,
+        1000
+      )
+      console.log(image)
+      const updatedProfile = await User.findByIdAndUpdate(
+        { _id: userId },
+        { image: image.secure_url },
+        { new: true }
+      )
+      res.send({
+        success: true,
+        message: `Image Updated successfully`,
+        data: updatedProfile,
+      })
+    } catch (error) {
+      return res.status(500).json({
+        success: false,
+        message: error.message,
+      })
+    }
+};
+
