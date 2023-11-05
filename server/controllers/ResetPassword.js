@@ -1,6 +1,8 @@
  const User = require("../models/User");
  const mailSender = require("../utils/mailSender");
  const bcrypt = require("bcryptjs");
+const crypto = require("crypto");
+
 
  //reset password token
  exports.resetPasswordToken = async (req, res) => {
@@ -13,7 +15,7 @@
         if (!user) {
             return res.status(400).json({
                 success: false,
-                message: "User not found"
+                message: `This email ${email} does not exist in our database`
             });
         }
 
@@ -24,6 +26,7 @@
         //update user by adding token adn token expiry time
         const updateDetails = await User.findOneAndUpdate({ email }, { token:token, resetPasswordExpires: Date.now() + 5*60*1000 }, { new: true });
 
+        console.log("updateDetails", updateDetails);
         //creatte url
         const url = `http://localhost:3000/reset-password/${token}`;
 
