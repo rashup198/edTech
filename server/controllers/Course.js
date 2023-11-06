@@ -162,10 +162,7 @@ exports.getCourseDetails = async (req, res) => {
             {path:"instructor",
              populate:{path:"additionalDetails"}}).populate(
                         {path:"rantingAndReviews",
-                        populate:{path:"user"}}).populate(
-                                {path:"courseContent"
-                            ,populate:{path:"sectionContent"}}).populate(
-                                "Category").exec();
+                        populate:{path:"user"}}).populate("courseContent").populate("category").exec();
 
 
                                 // validate course details

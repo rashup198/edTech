@@ -15,7 +15,7 @@ const { createSection,deleteSection,updateSection } = require('../controllers/Se
 
 // subsection controllers
 
-const { createSubSection,deleteSubSection,updateSubSection } = require('../controllers/SubSection');
+const { createSubSection,deleteSubSection,updateSubSection } = require('../controllers/Subsection');
 
 // Rating controllers
 
