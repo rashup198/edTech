@@ -157,7 +157,8 @@ exports.signUp = async (req, res) => {
         console.log("error", error);
         res.status(500).json({
             success: false,
-            message:"User can not be created. Please try again later"
+            message:"User can not be created. Please try again later",
+            error: error.message
         });
     }
 

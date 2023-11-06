@@ -8,103 +8,121 @@ const dotenv = require('dotenv');
 //create course
 
 exports.createCourse = async (req, res) => {
+	try {
+		// Get user ID from request object
+		const userId = req.user.id;
 
-    try {
-        
-        //extract data from req.body
-        const{courseName,
+		// Get all required fields from request body
+		let {
+			courseName,
 			courseDescription,
 			whatYouWillLearn,
 			price,
 			tag,
 			category,
 			status,
-			instructions,}= req.body;
+			instructions,
+		} = req.body;
 
-        //get thumbnail 
-        const thumbnail = req.file.thumbnailImage;
+		// Get thumbnail image from request files
+		const thumbnail = req.files.thumbnailImage;
 
-        //validation
-        if(!courseName || !courseDescription || !price || !tag || !whatYouWillLearn || !thumbnail || !category){
-            return res.status(400).json({
-                success: false,
-                message: "All fields are required"
-            })
-        }
-        if(!status || status === undefined){
-            status = "Draft";
-        }
+		// Check if any of the required fields are missing
+		if (
+			!courseName ||
+			!courseDescription ||
+			!whatYouWillLearn ||
+			!price ||
+			!tag ||
+			!thumbnail ||
+			!category
+		) {
+			return res.status(400).json({
+				success: false,
+				message: "All Fields are Mandatory",
+			});
+		}
+		if (!status || status === undefined) {
+			status = "Draft";
+		}
+        // Check if the user is an instructor
+		const instructorDetails = await User.findById(userId, {
+            accountType:"Instructor"})
 
-        //check for instructor
-        const userId = req.user._id;
-        const instructorDetails = await User.findById(userId,{
-            accountType:"Instructor"
-        });
         console.log("instructorDetails", instructorDetails);
-        if(!instructorDetails){
-            return res.status(400).json({
-                success: false,
-                message: "Instructor not found"
-            })
-        }
+        if (!instructorDetails) {
+			return res.status(404).json({
+				success: false,
+				message: "Instructor Details Not Found",
+			});
+		}
 
-        //check for tag
-        const categoryDetails = await Category.findById(category);
-        console.log("categoryDetails", categoryDetails);
-        if(!categoryDetails){
-            return res.status(400).json({
-                success: false,
-                message: "Category not found"
-            })
-        }
+		// Check if the tag given is valid
+		const categoryDetails = await Category.findById(category);
+		if (!categoryDetails) {
+			return res.status(404).json({
+				success: false,
+				message: "Category Details Not Found",
+			});
+		}
+		// Upload the Thumbnail to Cloudinary
+		const thumbnailImage = await uploadImageToCloudinary(
+			thumbnail,
+			process.env.FOLDER_NAME
+		);
+		console.log(thumbnailImage);
+		// Create a new course with the given details
+		const newCourse = await Course.create({
+			courseName,
+			courseDescription,
+			instructor: instructorDetails._id,
+			whatYouWillLearn: whatYouWillLearn,
+			price,
+			tag: tag,
+			category: categoryDetails._id,
+			thumbnail: thumbnailImage.secure_url,
+			status: status,
+			instructions: instructions,
+		});
 
-        //upload thumbnail to cloudinary
-        const thumbnailImage = await uploadImageToCloudinary(thumbnail,process.env.Folder_Name);
-
-        //create course enty in db
-        const newCourse = await Course.create({
-            courseName,
-            courseDescription,
-            instructor:instructorDetails._id,
-            price,
-            tag:tagDetails._id,
-            whatYouWillLearn:whatYouWillLearn,
-            thumbnail:thumbnailImage.secure_url
-        });
-
-        // user course array update
-
-        await User.findByIdAndUpdate(
-            {_id:instructorDetails._id},
-            {$push:{courses:newCourse._id}},
-            {new:true},
-            )  
-            
-        // updated tag course array
-
-        await Category.findByIdAndUpdate
-        ({_id:category},
-            {$push:{courses:newCourse._id}},
-            {new:true},)
-  
-            //send response
-
-            return res.status(200).json({
-                success: true,
-                message: "Course created successfully",
-                newCourse
-            });
-
-    } catch (error) {
-        console.log("error", error);
-        res.status(500).json({
-            success: false,
-            message:"failed to create course",
-            error:error.message
-        });
-    }
-
-}
+		// Add the new course to the User Schema of the Instructor
+		await User.findByIdAndUpdate(
+			{
+				_id: instructorDetails._id,
+			},
+			{
+				$push: {
+					courses: newCourse._id,
+				},
+			},
+			{ new: true }
+		);
+		// Add the new course to the Categories
+		await Category.findByIdAndUpdate(
+			{ _id: category },
+			{
+				$push: {
+					course: newCourse._id,
+				},
+			},
+			{ new: true }
+		);
+		// Return the new course and a success message
+		res.status(200).json({
+			success: true,
+			data: newCourse,
+			message: "Course Created Successfully",
+		});
+	} catch (error) {
+		// Handle any errors that occur during the creation of the course
+		console.error(error);
+		res.status(500).json({
+			success: false,
+			message: "Failed to create course",
+			error: error.message,
+		});
+	}
+};
 
 // get all courses
 
@@ -137,17 +155,14 @@ exports.getAllCourses = async (req, res) => {
 exports.getCourseDetails = async (req, res) => {
 
     try {
-        const {courseId} = req.params.id;
+        const {courseId} = req.body;
 
         //find course details
         const courseDetails = await Course.find({_id:courseId}).populate(
             {path:"instructor",
              populate:{path:"additionalDetails"}}).populate(
-                    {path:"tag"}).populate(
                         {path:"rantingAndReviews",
                         populate:{path:"user"}}).populate(
-                            {path:"studentsEnrolled",
-                            populate:{path:"additionalDetails"}}).populate(
                                 {path:"courseContent"
                             ,populate:{path:"sectionContent"}}).populate(
                                 "Category").exec();

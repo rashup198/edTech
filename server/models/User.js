@@ -39,7 +39,7 @@ const userSchema = new mongoose.Schema({
         type:String,
         default:"/images/default.png"
     },
-    tokens:{
+    token:{
         type:String,
     },
     resetPasswordExpires:{

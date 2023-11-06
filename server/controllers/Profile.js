@@ -13,7 +13,7 @@ exports.updateProfile = async (req, res) => {
         const id = req.user._id;
     
         //validation
-        if(!contactNumber|| !about || !dateOfBirth){
+        if(!about || !dateOfBirth){
             return res.status(400).json({
                 success:false,
                 message:"All fields are required"
@@ -60,37 +60,28 @@ exports.deleteProfile = async (req, res) => {
     try {
         const id= req.user.id;
         //validation
-        const user = await User.findById({id});
-        if(!user){
-            return res.status(404).json({
-                success:false,
-                message:"User not found"
-            })
+        const user = await User.findById({ _id: id });
+        if (!user) {
+          return res.status(404).json({
+            success: false,
+            message: "User not found",
+          });
         }
-
-        // delete profile
-        await Profile.findByIdAndDelete({_id:user.additionalDetails});
-
-        //delete user
-        await User.findByIdAndDelete({_id:id});
-
-        //unenroll user from course
-        await Course.updateMany({enrolledUsers:id},{$pull:{enrolledUsers:id}});
-
-        //send response
-        return res.status(200).json({
-            success:true,
-            message:"user deleted successfully"
-        })
-        
-    } catch (error) {
-         return res.status(500).json({
-            success:false,
-            message:"failed to delete user",
-            error:error.message
-        })
+        // Delete Assosiated Profile with the User
+        await Profile.findByIdAndDelete({ _id: user.additionalDetails });
+        // Now Delete User
+        await User.findByIdAndDelete({ _id: id });
+        res.status(200).json({
+          success: true,
+          message: "User deleted successfully",
+        });
+      } catch (error) {
+        console.log(error);
+        res
+          .status(500)
+          .json({ success: false, message: "User Cannot be deleted successfully" });
+      }
     }
-}
 
 // get all user details
 

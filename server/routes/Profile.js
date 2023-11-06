@@ -3,7 +3,7 @@ const router = express.Router();
 const {auth}= require("../middelwares/auth");
 
 // Controllers
-const{getEnrolledCourses,updateDisplayPicture,getAllUserDetails,deleteProfile,updateProfile,} = require('../controllers/Profile');
+const{getEnrolledCourses,updateDisplayPicture,getAllUserDetails,deleteProfile,updateProfile} = require('../controllers/Profile');
 
 // Profile routes
 

@@ -55,9 +55,7 @@ const courseSchema = new mongoose.Schema({
         required:true
     }],
     instructions:{
-        type:mongoose.Schema.Types.ObjectId,
-        required:true,
-        ref:"User"
+        type:[String],
     },
     status:{
         type:String,

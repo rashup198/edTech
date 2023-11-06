@@ -27,8 +27,8 @@ app.use(cors({
     credentials: true
 }));
 app.use(fileUpload({
-    useTempFiles: true,
-    tempFileDir: "/tmp/",
+    useTempFiles:true,
+    tempFileDir:"/tmp",
 }));
 
 //cloudinary connect

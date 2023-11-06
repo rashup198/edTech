@@ -4,23 +4,16 @@ const subSection = new mongoose.Schema({
 
    titel:{
        type:String,
-       required:true,
-       trim:true
    },
    timeDuration:{
        type:String,
-       required:true,
-       trim:true
    },
    description:{
-         type:String,
-         required:true,
-         trim:true
+         type:String  
+         
     },
     videoUrl:{
         type:String,
-        required:true,
-        trim:true
     },
     
 })
