@@ -163,8 +163,6 @@ exports.getCourseDetails = async (req, res) => {
              populate:{path:"additionalDetails"}}).populate(
                         {path:"rantingAndReviews",
                         populate:{path:"user"}}).populate("courseContent").populate("category").exec();
-
-
                                 // validate course details
 
                 if(!courseDetails){
