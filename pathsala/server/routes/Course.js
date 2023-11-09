@@ -9,7 +9,7 @@ const { createCourse, getAllCourses,getCourseDetails } = require('../controllers
 // catrgory controllers
 const { createCategory, showAllCategories,categoryPageDetails } = require('../controllers/Category');
 
-// Section controllers
+// Section controllers  
 
 const { createSection,deleteSection,updateSection } = require('../controllers/Section');
 

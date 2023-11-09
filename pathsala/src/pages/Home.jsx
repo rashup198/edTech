@@ -4,6 +4,9 @@ import { FaArrowRight } from 'react-icons/fa'
 import CTAButton from '../components/core/Homepage/Button'
 import Banner from "../assets/Images/banner.mp4"
 import CodeBlocks from '../components/core/Homepage/CodeBlocks'
+import TimelineSection from '../components/core/Homepage/TimelineSection'
+import LearningLanguageSection from '../components/core/Homepage/LearningLanguageSection'
+
 const Home = () => {
   return (
     <div>
@@ -116,10 +119,68 @@ const Home = () => {
                 />
 
             </div>
+            </div>
         {/*  section 3 */}
+        <div className='bg-pure-greys-5 text-richblack-700'>
+            <div className='homepage_bg h-[310px]'>
+
+              <div className='w-11/12 max-w-maxContent flex flex-col items-center justify-center pt-[100px] gap-5 mx-auto'>
+                    
+                <div className='flex gap-7 text-white'>
+                    <CTAButton active={true} linkto={"/signup"}>
+                        <div className='flex items-center gap-3'>Explore Full Catalog 
+                            <FaArrowRight/>
+                        </div>
+                    </CTAButton>
+
+                    <CTAButton active={false} linkto={"/signup"}>
+                        <div className='flex items-center gap-3'>Learn More
+                        </div>
+                    </CTAButton>
+
+                </div>
+                </div>      
+            </div>
+
+            <div className='mx-auto w-11/12 max-w-maxContent flex flex-col items-center justify-between gap-[100px]'>
+                    <div className='flex gap-5 mb-10 mt-[90px] '>
+                        <div className=' text-4xl font-semibold w-[45%]'>
+                            Get the Skills you need for a <span className='bg-clip-text text-transparent bg-gradient-to-r from-pink-400 to-caribbeangreen-100'>Job that is in demand</span> 
+                        </div>
+                        <div className='flex flex-col gap-10 w-[40%] items-start'>
+                        <div className='text-[16px]'>
+                                Learn the latest skills like business analytics,fullStack development , android development,backend development, graphic design, Python, and more
+                        </div>
+                        <CTAButton active={true} linkto={"/signup"}>
+                            <div>
+                                Learn More
+                            </div>
+
+                        </CTAButton>
+                    </div>
+                    </div>
+                    
+            <TimelineSection />
+
+            <LearningLanguageSection />
+            
+            </div>
+
+
+        </div>
+
+
+        {/* section 4 */}
+
+
+
+
+
+
+
 
         {/* footer */}
-        </div>
+        
 
     
         
