@@ -32,7 +32,7 @@ const LearningLanguageSection = () => {
               </img>
           </div>
 
-          <div className="w-fit ">
+          <div className="w-fit mb-[50px]">
             <CTAButton active={true} linkto={"/signup"}>
                 <div className='flex items-center gap-3'>Learn More
                 </div>

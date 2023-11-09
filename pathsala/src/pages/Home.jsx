@@ -6,6 +6,7 @@ import Banner from "../assets/Images/banner.mp4"
 import CodeBlocks from '../components/core/Homepage/CodeBlocks'
 import TimelineSection from '../components/core/Homepage/TimelineSection'
 import LearningLanguageSection from '../components/core/Homepage/LearningLanguageSection'
+import InstructorSection from '../components/core/Homepage/InstructorSection'
 
 const Home = () => {
   return (
@@ -165,15 +166,15 @@ const Home = () => {
             <LearningLanguageSection />
             
             </div>
+        </div>
+        {/* section 3 */}
+        <div className="w-11/12 mx-auto max-w-maxContent  flex-col items-center justify-between gap-8 bg-richblack-900 text-white">
 
+                    <InstructorSection />
+
+           <h1 className='text-center text-4xl font-semibold mt-10' >Revies from other Learners</h1>
 
         </div>
-
-
-        {/* section 4 */}
-
-
-
 
 
 
