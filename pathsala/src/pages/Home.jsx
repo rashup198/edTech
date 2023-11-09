@@ -7,6 +7,7 @@ import CodeBlocks from '../components/core/Homepage/CodeBlocks'
 import TimelineSection from '../components/core/Homepage/TimelineSection'
 import LearningLanguageSection from '../components/core/Homepage/LearningLanguageSection'
 import InstructorSection from '../components/core/Homepage/InstructorSection'
+import ExploreMore from '../components/core/Homepage/ExploreMore'
 
 const Home = () => {
   return (
@@ -120,6 +121,8 @@ const Home = () => {
                 />
 
             </div>
+
+            <ExploreMore></ExploreMore>
             </div>
         {/*  section 3 */}
         <div className='bg-pure-greys-5 text-richblack-700'>
@@ -167,7 +170,7 @@ const Home = () => {
             
             </div>
         </div>
-        {/* section 3 */}
+        {/* section 4 */}
         <div className="w-11/12 mx-auto max-w-maxContent  flex-col items-center justify-between gap-8 bg-richblack-900 text-white">
 
                     <InstructorSection />
