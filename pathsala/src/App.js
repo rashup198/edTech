@@ -2,6 +2,10 @@ import { Routes,Route } from "react-router-dom";
 import "./App.css";
 import Home from "./pages/Home";
 import Navbar from "./components/common/Navbar";
+import OpenRoute from "./components/core/auth/OpenRoute";
+import Signup from "./pages/Signup";
+import Login from "./pages/Login";
+import ForgotPassword from "./pages/ForgotPassword";
 
 
 function App() {
@@ -10,6 +14,21 @@ function App() {
     <Navbar></Navbar>
       <Routes>
         <Route path="/" element={<Home></Home>}></Route>
+
+        <Route path="/signup" element={<OpenRoute>
+          <Signup></Signup>
+        </OpenRoute>}
+        ></Route>
+
+        <Route
+          path="login"
+          element={
+            <OpenRoute>
+              <Login />
+            </OpenRoute>
+          }
+        />
+        <Route path="/forgot-password" element={<ForgotPassword></ForgotPassword>}></Route>
       </Routes>
    </div>
   );
