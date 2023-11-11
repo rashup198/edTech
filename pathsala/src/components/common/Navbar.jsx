@@ -48,8 +48,8 @@ const Navbar = () => {
     return matchPath({path: route}, location.pathname);
   }
   return (
-    <div className='flex h-14 border-b-[1px] border-b-richblack-500'>
-      <div className="w-11/12 flex max-w-maxContent items-center  justify-between ">
+    <div className='h-14 border-b-[1px] border-b-richblack-500'>
+      <div className="mx-auto flex w-11/12 max-w-maxContent items-center text-white justify-between  mt-2 ">
         <Link to='/' className='text-2xl font-bold text-white'>Pathshala</Link>
 
         {/* // Navbar Links */}
