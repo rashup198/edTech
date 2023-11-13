@@ -54,7 +54,7 @@ const Navbar = () => {
 
         {/* // Navbar Links */}
         <nav>
-          <ul className='flex gap-x-6 group text-richblack-25'>
+          <ul className='flex gap-x-6 text-richblack-25'>
             {NavbarLinks.map((link,index) => (
               <li key={index}>
                 {
