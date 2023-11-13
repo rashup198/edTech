@@ -7,6 +7,7 @@ import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import ForgotPassword from "./pages/ForgotPassword";
 import UpdatePassword from "./pages/UpdatePassword";
+import VerifyEmail from "./pages/VerifyEmail";
 
 
 function App() {
@@ -32,6 +33,10 @@ function App() {
         <Route path="/forgot-password" element={<ForgotPassword></ForgotPassword>}></Route>
 
         <Route path="/update-password/:id" element={<UpdatePassword/>}></Route>
+        
+        <Route path="*" element={<h1>404 Not Found</h1>}></Route>
+        <Route path="verify-email" element={<VerifyEmail></VerifyEmail>}></Route>
+        
 
 
       </Routes>
