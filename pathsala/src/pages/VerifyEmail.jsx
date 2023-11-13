@@ -15,31 +15,17 @@ const VerifyEmail = () => {
 
   
 
-  const handleVerifyAndSignup = (e) => {
+  const handleOnSubmit = (e) => {
     e.preventDefault();
-    const {
-      accountType,
-      firstName,
-      lastName,
-      email,
-      password,
-      confirmPassword,
-    } = signupData;
-
-    dispatch(
-      signUp(
-        accountType,
-        firstName,
-        lastName,
-        email,
-        password,
-        confirmPassword,
-        otp,
-        navigate
-      )
-    );
+    const { accountType, email, password, confirmPassword, firstName, lastName } = signupData;
+    dispatch(signUp(accountType, email, password, confirmPassword, firstName, lastName, otp, navigate));
   };
 
+  useEffect(() => {
+    if (!signupData) {
+      navigate('/signup');
+    }
+  });
 
   return (
     <div className=" min-h-screen flex items-center justify-center">
