@@ -61,7 +61,7 @@ const VerifyEmail = () => {
             </Link>
           </div>
           <button
-            onClick={() => dispatch(sendOtp(signupData.email))}
+            onClick={() => dispatch(sendOtp(signupData.email,navigate))}
             className="text-blue-500 hover:underline focus:outline-none"
           >
             Resend it
