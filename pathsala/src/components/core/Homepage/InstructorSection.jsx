@@ -1,15 +1,13 @@
 import React from 'react'
-import instructor from '../../../assets/Images/Instructor.png'
+import instructor from '../../../assets/Images/teacher.jpg'
 import { FaArrowRight } from 'react-icons/fa'
 import CTAButton from '../Homepage/Button'
 const InstructorSection = () => {
   return (
     <div className='mt-[100px] mb-[100px]'>
-      <div className="flex gap-20 items-center ">
+      <div className="flex gap-[100px] items-center ">
         <div className='w-50%'>
-            <img src={instructor} alt='instructor' className='object-cover rounded-lg shadow-blue-200'></img>
-
-
+            <img src={instructor} alt='instructor' className='w-[700px] rounded-lg shadow-blue-200'></img>
         </div>
         <div className="w-[50%] flex flex-col gap-10 ">
             <div className=" text-4xl font-semibold">

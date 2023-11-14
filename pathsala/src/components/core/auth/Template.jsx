@@ -30,15 +30,16 @@ function Template({ title, description1, description2, image, formType }) {
             <img
               src={frameImg}
               alt="Pattern"
-              width={558}
-              height={504}
+              width={508}
+              height={400}
               loading="lazy"
+              className="h-[310px]"
             />
             <img
               src={image}
               alt="Students"
               width={558}
-              height={504}
+              height={600}
               loading="lazy"
               className="absolute -top-4 right-4 z-10"
             />

@@ -6,6 +6,7 @@ import { setUser } from "../../slices/profileSlice"
 import { apiConnector } from "../apiconnector"
 import { endpoints } from "../api"
 
+
 const {
   SENDOTP_API,
   SIGNUP_API,
@@ -120,7 +121,6 @@ export function logout(navigate) {
   return (dispatch) => {
     dispatch(setToken(null))
     dispatch(setUser(null))
-    // dispatch(resetCart())
     localStorage.removeItem("token")
     localStorage.removeItem("user")
     toast.success("Logged Out")
@@ -175,4 +175,3 @@ export function resetPassword(password, confirmPassword, token) {
     dispatch(setLoading(false));
   }
 }
-
