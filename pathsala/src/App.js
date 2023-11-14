@@ -10,6 +10,7 @@ import UpdatePassword from "./pages/UpdatePassword";
 import VerifyEmail from "./pages/VerifyEmail";
 import Error from "./pages/Error";
 import About from "./pages/About";
+import ContactFrom from "./components/core/ContactFrom";
 
 
 function App() {
@@ -39,6 +40,7 @@ function App() {
         <Route path="*" element={<Error></Error>}></Route>
         <Route path="verify-email" element={<VerifyEmail></VerifyEmail>}></Route>
         <Route path="/about" element={<About></About>}></Route>
+        <Route path="/contact" element={<ContactFrom></ContactFrom>}></Route>
         
 
 
