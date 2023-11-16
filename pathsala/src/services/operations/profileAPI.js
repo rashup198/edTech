@@ -1,5 +1,5 @@
 import { toast } from "react-hot-toast"
-import { apiConnector } from "../apiConnector"
+import { apiConnector } from "../apiconnector"
 import { profileEndpoints } from "../api"
 import { logout } from "./authAPI"
 import { setLoading } from "../../slices/profileSlice";
