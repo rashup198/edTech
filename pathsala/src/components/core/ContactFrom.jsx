@@ -1,40 +1,49 @@
-import React, { useEffect } from 'react'
-import {useForm} from 'react-hook-form';
-import { useState } from 'react';
-import { apiConnector } from '../../services/apiconnector';
-import { contactusEndpoint } from '../../services/api';
-import CountryCide from "../../data/countrycode.json"
+import React, { useEffect, useState } from "react"
+import { useForm } from "react-hook-form"
+
+import CountryCode from "../../data/countrycode.json"
+import { apiConnector } from "../../services/apiconnector"
+import { contactusEndpoint } from "../../services/api"
+
 
 const ContactFrom = () => {
-    const [loading, setLoading] = useState(false);
-    const {register, handleSubmit,reset, formState: {errors,isSubmitSuccessFul}} = useForm();
-    useEffect(() => {
-        if(isSubmitSuccessFul){
-            reset({
-                name:"",
-                email:"",
-                subject:"",
-                phoneNo:"",
-                message:""
-            });
-        }
+  const [loading, setLoading] = useState(false)
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitSuccessful },
+  } = useForm()
+
+  const submitContactForm = async (data) => {
+    // console.log("Form Data - ", data)
+    try {
+      setLoading(true)
+      const res = await apiConnector(
+        "POST",
+        contactusEndpoint.CONTACT_US_API,
+        data
+      )
+      // console.log("Email Res - ", res)
+      setLoading(false)
+    } catch (error) {
+      console.log("ERROR MESSAGE - ", error.message)
+      setLoading(false)
     }
-    , [isSubmitSuccessFul,reset])
-    const submitContactForm= async (data) => {
-        console.log("data",data);
-        // try {
-        //     setLoading(true);
-        //     const response = await apiConnector("POST",contactusEndpoint.CONTACT_US_API,data)
-        //     console.log("response",response);
-        //     setLoading(false);
+  }
 
-        // } catch (error) {
-        //     console.log("error",error);
-        //     setLoading(false);
-
-        // }
-
+  useEffect(() => {
+    if (isSubmitSuccessful) {
+      reset({
+        email: "",
+        firstname: "",
+        lastname: "",
+        message: "",
+        phoneNo: "",
+      })
     }
+  }, [reset, isSubmitSuccessful])
+
   return (
 
     <div className='mb-[10px] flex flex-col justify-center items-center '>
@@ -69,37 +78,54 @@ const ContactFrom = () => {
 
         {/* //phone no */}
 
-        <div className='flex gap-2'>
-          <label htmlFor="phoneNo">Phone No</label>
-          <div className='flex flex-row gap-5'>
-            {/* Dropdown */}
-            {/* <div className='flex gap-5 lg:w-[80px]'>
-              <select
-                name="countrycode"
-                id="countrycode"
-                {...register("countrycode", { required: true })}
-                className='form-select w-[80px] text-black'
-              >
-                {CountryCide.map((country, index) => (
-                  <option key={index} value={country.dial_code} className='text-black' >
-                  {country.name} 
+        <div className="flex flex-col gap-2 text-black">
+        <label htmlFor="phonenumber" className="lable-style">
+          Phone Number
+        </label>
+
+        <div className="flex gap-5">
+          <div className="flex w-[81px] flex-col gap-2">
+            <select
+              type="text"
+              name="firstname"
+              id="firstname"
+              placeholder="Enter first name"
+              className="form-style"
+              {...register("countrycode", { required: true })}
+            >
+              {CountryCode.map((ele, i) => {
+                return (
+                  <option key={i} value={ele.code}>
+                    {ele.code} -{ele.country}
                   </option>
-                ))}
-              </select>
-            </div> */}
-            {/* Phone number input */}
-            <div className='flex items-center gap-5'>
-              <input
-                type="text"
-                id="phoneNo"
-                placeholder='Enter phone no'
-                {...register("phoneNo", { required: true })}
-                className='bg-[#164154] w-[550px] text-[#fff] p-2 my-2 rounded-lg'
-              />
-              {errors.phoneNo && <span className='text-red-500 text-sm'>Phone no is required</span>}
-            </div>
+                )
+              })}
+            </select>
+          </div>
+          <div className="flex w-[calc(100%-90px)] flex-col gap-2">
+            <input
+              type="number"
+              name="phonenumber"
+              id="phonenumber"
+              placeholder="12345 67890"
+              className="form-style"
+              {...register("phoneNo", {
+                required: {
+                  value: true,
+                  message: "Please enter your Phone Number.",
+                },
+                maxLength: { value: 12, message: "Invalid Phone Number" },
+                minLength: { value: 10, message: "Invalid Phone Number" },
+              })}
+            />
           </div>
         </div>
+        {errors.phoneNo && (
+          <span className="-mt-1 text-[12px] text-yellow-100">
+            {errors.phoneNo.message}
+          </span>
+        )}
+      </div>
 
         <div className='flex items-center gap-5'>
           <label htmlFor="message" className='block text-sm font-medium text-gray-300'>Message</label>
