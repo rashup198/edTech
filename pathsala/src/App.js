@@ -11,6 +11,9 @@ import VerifyEmail from "./pages/VerifyEmail";
 import Error from "./pages/Error";
 import About from "./pages/About";
 import ContactFrom from "./components/core/ContactFrom";
+import MyProfile from "./components/core/Dashboard/MyProfile";
+import Dashboard from "./pages/Dashboard";
+import PrivateRoute from "./components/core/auth/PrivateRoute";
 
 
 function App() {
@@ -41,7 +44,15 @@ function App() {
         <Route path="verify-email" element={<VerifyEmail></VerifyEmail>}></Route>
         <Route path="/about" element={<About></About>}></Route>
         <Route path="/contact" element={<ContactFrom></ContactFrom>}></Route>
-        
+        <Route element={<PrivateRoute>
+          <Dashboard></Dashboard>
+        </PrivateRoute>}
+        >
+           <Route path="/dashboard/my-profile" element={<MyProfile></MyProfile>}></Route>
+           
+        </Route>
+       
+
 
 
       </Routes>
