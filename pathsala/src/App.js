@@ -19,17 +19,22 @@ import EnrolledCourses from "./components/core/Dashboard/EnrolledCourses";
 import Cart from "./components/core/Dashboard/Cart";
 import { ACCOUNT_TYPE } from "./utils/constants";
 import { useSelector } from "react-redux";
+import AddCourse from "./components/core/Dashboard/AddCourse"
 
 
 
 
 function App() {
   const user = useSelector((state) => state.auth.user)
+  console.log(user);
   return (
    <div className=" w-screen min-h-screen bg-richblack-900 flex flex-col font-inter">
     <Navbar></Navbar>
       <Routes>
+
         <Route path="/" element={<Home></Home>}></Route>
+       
+
 
         <Route path="/signup" element={<OpenRoute>
           <Signup></Signup>
@@ -41,6 +46,7 @@ function App() {
           element={
             <OpenRoute>
               <Login />
+              
             </OpenRoute>
           }
         />
@@ -58,21 +64,25 @@ function App() {
         >
            <Route path="/dashboard/my-profile" element={<MyProfile></MyProfile>}></Route>
            <Route path ="/dashboard/settings" element={<Settings></Settings>}></Route>
-           
-           
-           {
-            user?.accountType ===ACCOUNT_TYPE.STUDENT&&(
-              <>
-              <Route path="/dashboard/enrolled-courses" element={<EnrolledCourses></EnrolledCourses>}></Route>
-              <Route path="/dashboard/cart" element={<Cart></Cart>}></Route>
-              </>
-            )
-           }
-           
+          
+           {user?.accountType === ACCOUNT_TYPE.INSTRUCTOR && (
+            <>
+              <Route path="dashboard/add-course" element={<AddCourse />} />
+            </>
+          )}
+
+        {user?.accountType === ACCOUNT_TYPE.STUDENT && (
+            <>
+              <Route
+                path="dashboard/enrolled-courses"
+                element={<EnrolledCourses />}
+              />
+              <Route path="/dashboard/cart" element={<Cart />} />
+            </>
+          )}
+          <Route path="dashboard/settings" element={<Settings />} />
         </Route>
-       
-
-
+          
 
       </Routes>
    </div>
